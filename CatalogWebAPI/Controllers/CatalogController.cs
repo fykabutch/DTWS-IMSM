@@ -22,15 +22,24 @@ namespace CatalogWebAPI.Controllers
         [HttpGet]
         public List<SpecialtyGet> Get()
         {
+            _logger.LogInformation("Получаю каталог");
             return _context.Specialties
                 .Select(x => new SpecialtyGet
                 { 
                     Id = x.Id,
                     EducationalProgram = x.EducationalProgram,
                     FieldOfStudy = x.FieldOfStudy,
-                    ScientificField = x.ScientificField
+                    ScientificField = x.ScientificField,
+                    EducationLevel = x.EducationLevel
                 })
                 .ToList();
+
+        }
+        [HttpGet("{id}")]
+        public Specialty? Get(int id)
+        {
+            return _context.Specialties
+                .FirstOrDefault(x => x.Id == id);
 
         }
         [HttpPost]
