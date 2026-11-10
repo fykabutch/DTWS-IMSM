@@ -1,27 +1,26 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 
-namespace CatalogClientApp.Models
+namespace CatalogClientApp.Models;
+
+public class SpecialtyAddDto
 {
-    public class SpecialtyAddDto
-    {
-        [Required(ErrorMessage = "Введите образовательную программу.")]
-        [StringLength(200)]
-        [Display(Name = "Образовательная программа")]
-        public string EducationalProgram { get; set; } = string.Empty;
 
-        [Required(ErrorMessage = "Введите направление подготовки.")]
-        [StringLength(200)]
-        [Display(Name = "Направление подготовки")]
-        public string FieldOfStudy { get; set; } = string.Empty;
 
-        [Required(ErrorMessage = "Введите научную отрасль.")]
-        [StringLength(200)]
-        [Display(Name = "Научная отрасль")]
-        public string ScientificField { get; set; } = string.Empty;
 
-        [Required(ErrorMessage = "Введите уровень образования.")]
-        [StringLength(100)]
-        [Display(Name = "Уровень образования")]
-        public string EducationLevel { get; set; } = string.Empty;
-    }
+    [Required(ErrorMessage = "Заполните поле «Наименование».")]
+    [StringLength(200)]
+    [Display(Name = "Наименование")]
+    public string Name { get; set; } = "";
+
+    [Required(ErrorMessage = "Заполните поле «Код специальности».")]
+    [StringLength(200)]
+    [Display(Name = "Код специальности")]
+    public string Code { get; set; } = "";
+
+    [Range(1, int.MaxValue, ErrorMessage = "Выберите значение из списка.")]
+    [Display(Name = "Направление подготовки")]
+    public int DirectionId { get; set; }
+
 }
+
+

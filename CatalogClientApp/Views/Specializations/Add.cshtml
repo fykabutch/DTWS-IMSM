@@ -1,0 +1,24 @@
+@model CatalogClientApp.Models.SpecializationAddDto
+@{
+    ViewData["Title"] = "Добавление";
+}
+<h1 class="h3">@ViewData["Title"] — специализации</h1>
+<form asp-action="Add" method="post" class="col-md-7">
+
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <div class="mb-3">
+        <label asp-for="Name" class="form-label"></label>
+        <input asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="SpecialtyId" class="form-label"></label>
+        <select asp-for="SpecialtyId" asp-items="ViewBag.Parents" class="form-select"><option value="">Выберите...</option></select>
+        <span asp-validation-for="SpecialtyId" class="text-danger"></span>
+    </div>
+    <button class="btn btn-primary">Сохранить</button>
+    <a asp-action="Index" class="btn btn-outline-secondary">Отмена</a>
+</form>
+@section Scripts { <partial name="_ValidationScriptsPartial" /> }
+
+

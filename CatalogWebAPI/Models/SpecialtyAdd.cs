@@ -1,27 +1,21 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 
 namespace CatalogWebAPI.Models
 {
     public class SpecialtyAdd
     {
-        [Required(ErrorMessage = "Введите образовательную программу.")]
-        [StringLength(200)]
-        [Display(Name = "Образовательная программа")]
-        public string EducationalProgram { get; set; } = string.Empty;
 
-        [Required(ErrorMessage = "Введите направление подготовки.")]
+        [Required(ErrorMessage = "Заполните поле «Наименование».")]
         [StringLength(200)]
-        [Display(Name = "Направление подготовки")]
-        public string FieldOfStudy { get; set; } = string.Empty;
+        public string Name { get; set; } = "";
 
-        [Required(ErrorMessage = "Введите научную отрасль.")]
+        [Required(ErrorMessage = "Заполните поле «Код специальности».")]
         [StringLength(200)]
-        [Display(Name = "Научная отрасль")]
-        public string ScientificField { get; set; } = string.Empty;
+        public string Code { get; set; } = "";
 
-        [Required(ErrorMessage = "Введите уровень образования.")]
-        [StringLength(100)]
-        [Display(Name = "Уровень образования")]
-        public string EducationLevel { get; set; } = string.Empty;
+        [Range(1, int.MaxValue, ErrorMessage = "Выберите запись из списка.")]
+        public int DirectionId { get; set; }
+
     }
 }
+

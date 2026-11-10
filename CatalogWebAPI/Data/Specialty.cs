@@ -1,5 +1,5 @@
 using System.ComponentModel.DataAnnotations;
-
+using System.Text.Json.Serialization;
 namespace CatalogWebAPI.Data;
 
 public class Specialty
@@ -7,25 +7,20 @@ public class Specialty
     [Key]
     public int Id { get; set; }
 
-    [Required(ErrorMessage = "Введите образовательную программу.")]
+    [Required(ErrorMessage = "Заполните поле «Наименование».")]
     [StringLength(200)]
-    [Display(Name = "Образовательная программа")]
-    public string EducationalProgram { get; set; } = string.Empty;
+    [Display(Name = "Наименование")]
+    public string Name { get; set; } = "";
 
-    [Required(ErrorMessage = "Введите направление подготовки.")]
+    [Required(ErrorMessage = "Заполните поле «Код специальности».")]
     [StringLength(200)]
+    [Display(Name = "Код специальности")]
+    public string Code { get; set; } = "";
+
+    [Range(1, int.MaxValue, ErrorMessage = "Выберите значение из списка.")]
     [Display(Name = "Направление подготовки")]
-    public string FieldOfStudy { get; set; } = string.Empty;
-
-    [Required(ErrorMessage = "Введите научную отрасль.")]
-    [StringLength(200)]
-    [Display(Name = "Научная отрасль")]
-    public string ScientificField { get; set; } = string.Empty;
-
-    [Required(ErrorMessage = "Введите уровень образования.")]
-    [StringLength(100)]
-    [Display(Name = "Уровень образования")]
-    public string EducationLevel { get; set; } = string.Empty;
+    public int DirectionId { get; set; }
+    [JsonIgnore]
+    public Direction? Direction { get; set; }
 }
-
 

@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="CatalogWebAPI/CatalogWebAPI.csproj" />
+  <Project Path="CatalogClientApp/CatalogClientApp.csproj" />
+</Solution>
+

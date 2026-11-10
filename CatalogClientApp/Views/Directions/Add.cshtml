@@ -1,0 +1,19 @@
+@model CatalogClientApp.Models.DirectionAddDto
+@{
+    ViewData["Title"] = "Добавление";
+}
+<h1 class="h3">@ViewData["Title"] — направления подготовки</h1>
+<form asp-action="Add" method="post" class="col-md-7">
+
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <div class="mb-3">
+        <label asp-for="Name" class="form-label"></label>
+        <input asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+    <button class="btn btn-primary">Сохранить</button>
+    <a asp-action="Index" class="btn btn-outline-secondary">Отмена</a>
+</form>
+@section Scripts { <partial name="_ValidationScriptsPartial" /> }
+
+

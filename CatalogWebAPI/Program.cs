@@ -1,26 +1,20 @@
 using CatalogWebAPI.Data;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
-
-// Add services to the container.
-builder.Services.AddDbContext<MyApplicationContext>();
-
+builder.Services.AddDbContext<MyApplicationContext>(options =>
+    options.UseSqlite(builder.Configuration.GetConnectionString("Catalog")
+        ?? $"Data Source={Path.Combine(builder.Environment.ContentRootPath, "studycatalog.db")}"));
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
 var app = builder.Build();
-
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+using (var scope = app.Services.CreateScope())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    scope.ServiceProvider.GetRequiredService<MyApplicationContext>().Database.Migrate();
 }
-
-app.UseAuthorization();
-
+app.UseSwagger();
+app.UseSwaggerUI();
 app.MapControllers();
-
 app.Run();
+

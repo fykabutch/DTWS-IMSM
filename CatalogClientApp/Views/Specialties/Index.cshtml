@@ -1,0 +1,49 @@
+@model List<CatalogClientApp.Data.Specialty>
+@{
+    ViewData["Title"] = "Специальности";
+}
+<h1 class="h3">Специальности</h1>
+@if (ViewBag.Error != null) { <div class="alert alert-danger">@ViewBag.Error</div> }
+@if (TempData["Error"] != null) { <div class="alert alert-danger">@TempData["Error"]</div> }
+<form method="get" class="d-flex flex-wrap gap-2 my-3">
+    <input name="search" value="@ViewBag.Search" class="form-control w-auto" placeholder="Поиск по части названия или кода" aria-label="Поиск" />
+    <select name="parentId" class="form-select w-auto" aria-label="Фильтр">
+        <option value="">Все направления</option>
+        @if (ViewBag.Parents != null)
+        {
+            foreach (Microsoft.AspNetCore.Mvc.Rendering.SelectListItem option in ViewBag.Parents)
+            {
+                <option value="@option.Value" selected="@(option.Value == Convert.ToString(ViewBag.ParentId))">@option.Text</option>
+            }
+        }
+    </select>
+    <button class="btn btn-primary">Найти</button>
+    <a asp-action="Index" class="btn btn-outline-secondary">Сбросить</a>
+</form>
+<a asp-action="Add" class="btn btn-success mb-3">Добавить</a>
+<div class="table-responsive">
+<table class="table table-bordered">
+    <thead><tr><th>№ п/п</th><th>Наименование</th><th>Код специальности</th><th>Направление подготовки</th><th>Действия</th></tr></thead>
+    <tbody>
+    @for (int i = 0; i < Model.Count; i++)
+    {
+        var item = Model[i];
+        <tr>
+            <td>@(i + 1)</td>
+            <td>@item.Name</td>
+            <td>@item.Code</td>
+            <td>@item.DirectionName</td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-primary">Редактировать</a>
+                <form asp-action="Delete" asp-route-id="@item.Id" method="post" class="d-inline" onsubmit="return confirm('Удалить запись?');">
+                    <button class="btn btn-sm btn-outline-danger">Удалить</button>
+                </form>
+            </td>
+        </tr>
+    }
+    @if (Model.Count == 0) { <tr><td colspan="5">Записи не найдены.</td></tr> }
+    </tbody>
+</table>
+</div>
+
+
