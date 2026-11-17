@@ -13,6 +13,15 @@
             <a asp-controller="Directions" asp-action="Index">Направления</a>
             <a asp-controller="Specialties" asp-action="Index">Специальности</a>
             <a asp-controller="Specializations" asp-action="Index">Специализации</a>
+            @if (User.Identity?.IsAuthenticated == true)
+            {
+                <span>@User.Identity.Name</span> <a asp-controller="Account" asp-action="Profile">Личный кабинет</a>
+                <a asp-controller="Account" asp-action="Logout">Выход</a>
+            }
+            else
+            {
+                <a asp-controller="Account" asp-action="Login">Авторизация</a> <a asp-controller="Account" asp-action="Register">Регистрация</a>
+            }
         </div>
     </nav>
     <main class="container pb-4">@RenderBody()</main>
@@ -21,4 +30,6 @@
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
+
+
 

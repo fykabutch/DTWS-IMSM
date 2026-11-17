@@ -1,3 +1,6 @@
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authentication;
+using System.Net.Http.Headers;
 using CatalogClientApp.Data;
 using CatalogClientApp.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -6,12 +9,14 @@ using System.Text.Json;
 
 namespace CatalogClientApp.Controllers
 {
+    [Authorize]
     public class SpecializationsController : Controller
     {
         [HttpGet]
         public async Task<IActionResult> Index(string? search, int? parentId)
         {
             using var httpClient = new HttpClient();
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", await HttpContext.GetTokenAsync("access_token"));
             HttpResponseMessage response;
             if (string.IsNullOrWhiteSpace(search) && parentId == null)
             {
@@ -37,26 +42,32 @@ namespace CatalogClientApp.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Add()
         {
             using var httpClient = new HttpClient();
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", await HttpContext.GetTokenAsync("access_token"));
             var parents = await httpClient.GetFromJsonAsync<List<Specialty>>("http://localhost:5024/api/Specialties");
             ViewBag.Parents = new SelectList(parents, "Id", "Name");
             return View(new SpecializationAddDto());
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Add(SpecializationAddDto request)
         {
             using var httpClient = new HttpClient();
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", await HttpContext.GetTokenAsync("access_token"));
             var response = await httpClient.PutAsJsonAsync("http://localhost:5024/api/Specializations", request);
             return RedirectToAction("Index");
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int id)
         {
             using var httpClient = new HttpClient();
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", await HttpContext.GetTokenAsync("access_token"));
             var response = await httpClient.GetAsync("http://localhost:5024/api/Specializations/" + id);
             response.EnsureSuccessStatusCode();
             var responseText = await response.Content.ReadAsStringAsync();
@@ -71,22 +82,27 @@ namespace CatalogClientApp.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(SpecializationEditDto request)
         {
             using var httpClient = new HttpClient();
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", await HttpContext.GetTokenAsync("access_token"));
             var response = await httpClient.PatchAsJsonAsync("http://localhost:5024/api/Specializations", request);
             return RedirectToAction("Index");
         }
 
         [HttpPost]
 
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int id)
         {
             using var httpClient = new HttpClient();
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", await HttpContext.GetTokenAsync("access_token"));
             var response = await httpClient.DeleteAsync("http://localhost:5024/api/Specializations?specializationId=" + id);
             return RedirectToAction("Index");
         }
     }
 }
+
 
 

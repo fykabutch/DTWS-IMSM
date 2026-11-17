@@ -5,12 +5,14 @@ namespace CatalogWebAPI.Data;
 public class MyApplicationContext : DbContext
 {
     public MyApplicationContext(DbContextOptions<MyApplicationContext> options) : base(options) { }
+    public DbSet<User> Users { get; set; }
     public DbSet<Direction> Directions { get; set; }
     public DbSet<Specialty> Specialties { get; set; }
     public DbSet<Specialization> Specializations { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<User>().HasIndex(x => x.NormalizedUsername).IsUnique();
         modelBuilder.Entity<Specialty>()
             .HasOne(x => x.Direction).WithMany().HasForeignKey(x => x.DirectionId)
             .OnDelete(DeleteBehavior.Restrict);
@@ -19,4 +21,5 @@ public class MyApplicationContext : DbContext
             .OnDelete(DeleteBehavior.Restrict);
     }
 }
+
 

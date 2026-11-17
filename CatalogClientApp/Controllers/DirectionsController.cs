@@ -1,3 +1,6 @@
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authentication;
+using System.Net.Http.Headers;
 using CatalogClientApp.Data;
 using CatalogClientApp.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -5,12 +8,14 @@ using System.Text.Json;
 
 namespace CatalogClientApp.Controllers
 {
+    [Authorize]
     public class DirectionsController : Controller
     {
         [HttpGet]
         public async Task<IActionResult> Index(string? search)
         {
             using var httpClient = new HttpClient();
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", await HttpContext.GetTokenAsync("access_token"));
             HttpResponseMessage response;
             if (string.IsNullOrWhiteSpace(search))
             {
@@ -33,23 +38,28 @@ namespace CatalogClientApp.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public IActionResult Add()
         {
             return View(new DirectionAddDto());
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Add(DirectionAddDto request)
         {
             using var httpClient = new HttpClient();
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", await HttpContext.GetTokenAsync("access_token"));
             var response = await httpClient.PutAsJsonAsync("http://localhost:5024/api/Directions", request);
             return RedirectToAction("Index");
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int id)
         {
             using var httpClient = new HttpClient();
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", await HttpContext.GetTokenAsync("access_token"));
             var response = await httpClient.GetAsync("http://localhost:5024/api/Directions/" + id);
             response.EnsureSuccessStatusCode();
             var responseText = await response.Content.ReadAsStringAsync();
@@ -62,22 +72,27 @@ namespace CatalogClientApp.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(DirectionEditDto request)
         {
             using var httpClient = new HttpClient();
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", await HttpContext.GetTokenAsync("access_token"));
             var response = await httpClient.PatchAsJsonAsync("http://localhost:5024/api/Directions", request);
             return RedirectToAction("Index");
         }
 
         [HttpPost]
 
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int id)
         {
             using var httpClient = new HttpClient();
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", await HttpContext.GetTokenAsync("access_token"));
             var response = await httpClient.DeleteAsync("http://localhost:5024/api/Directions?directionId=" + id);
             return RedirectToAction("Index");
         }
     }
 }
+
 
 

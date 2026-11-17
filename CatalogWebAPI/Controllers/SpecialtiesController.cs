@@ -1,11 +1,13 @@
 using CatalogWebAPI.Data;
 using CatalogWebAPI.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CatalogWebAPI.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
     public class SpecialtiesController : ControllerBase
     {
         private readonly MyApplicationContext _context;
@@ -64,6 +66,7 @@ namespace CatalogWebAPI.Controllers
         }
 
         [HttpPut]
+        [Authorize(Roles = "Admin")]
         public ActionResult<Specialty> Put(SpecialtyAdd request)
         {
             if (!_context.Directions.Any(x => x.Id == request.DirectionId))
@@ -80,6 +83,7 @@ namespace CatalogWebAPI.Controllers
         }
 
         [HttpDelete]
+        [Authorize(Roles = "Admin")]
         public IActionResult Delete(int specialtyId)
         {
             var specialty = _context.Specialties.FirstOrDefault(x => x.Id == specialtyId);
@@ -95,6 +99,7 @@ namespace CatalogWebAPI.Controllers
         }
 
         [HttpPatch]
+        [Authorize(Roles = "Admin")]
         public IActionResult Patch(SpecialtyEdit model)
         {
             var specialty = _context.Specialties.FirstOrDefault(x => x.Id == model.Id);
@@ -112,5 +117,6 @@ namespace CatalogWebAPI.Controllers
         }
     }
 }
+
 
 

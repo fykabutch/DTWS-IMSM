@@ -1,11 +1,13 @@
 using CatalogWebAPI.Data;
 using CatalogWebAPI.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CatalogWebAPI.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
     public class DirectionsController : ControllerBase
     {
         private readonly MyApplicationContext _context;
@@ -54,6 +56,7 @@ namespace CatalogWebAPI.Controllers
         }
 
         [HttpPut]
+        [Authorize(Roles = "Admin")]
         public Direction Put(DirectionAdd request)
         {
             var direction = new Direction
@@ -66,6 +69,7 @@ namespace CatalogWebAPI.Controllers
         }
 
         [HttpDelete]
+        [Authorize(Roles = "Admin")]
         public IActionResult Delete(int directionId)
         {
             var direction = _context.Directions.FirstOrDefault(x => x.Id == directionId);
@@ -81,6 +85,7 @@ namespace CatalogWebAPI.Controllers
         }
 
         [HttpPatch]
+        [Authorize(Roles = "Admin")]
         public IActionResult Patch(DirectionEdit model)
         {
             var direction = _context.Directions.FirstOrDefault(x => x.Id == model.Id);
@@ -94,5 +99,6 @@ namespace CatalogWebAPI.Controllers
         }
     }
 }
+
 
 

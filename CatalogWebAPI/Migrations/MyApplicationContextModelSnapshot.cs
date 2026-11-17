@@ -79,6 +79,36 @@ namespace CatalogWebAPI.Migrations
                     b.ToTable("Specialties");
                 });
 
+            modelBuilder.Entity("CatalogWebAPI.Data.User", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("NormalizedUsername")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("PasswordHash")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Role")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NormalizedUsername")
+                        .IsUnique();
+
+                    b.ToTable("Users");
+                });
+
             modelBuilder.Entity("CatalogWebAPI.Data.Specialization", b =>
                 {
                     b.HasOne("CatalogWebAPI.Data.Specialty", "Specialty")
